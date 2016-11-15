@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
 	float xmin;
 	float xmax; 
 	float padding = 0.5f; 
+	public GameObject laser; 
 
 	// Use this for initialization
 	void Start () {
@@ -18,6 +19,11 @@ public class PlayerController : MonoBehaviour {
 		xmin = leftMost.x + padding;
 		xmax = rightMost.x - padding; 
 	}
+
+	void Shooting(){
+		GameObject beam = Instantiate(laser, transform.position, Quaternion.identity) as GameObject;
+		beam.GetComponent<Rigidbody2D>().velocity = new Vector3(0, speed); 
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -27,6 +33,14 @@ public class PlayerController : MonoBehaviour {
 		}else if(Input.GetKey(KeyCode.RightArrow))
 		{
 			transform.position += new Vector3(speed * Time.deltaTime, 0, 0); 
+		}
+
+		if(Input.GetKeyDown(KeyCode.Space))
+		{
+			InvokeRepeating("Shooting", 0.0001f, 0.2f); 
+		}else if(Input.GetKeyUp(KeyCode.Space))
+		{
+			CancelInvoke("Shooting"); 
 		}
 
 		newPosition = Mathf.Clamp(transform.position.x, xmin, xmax); 
