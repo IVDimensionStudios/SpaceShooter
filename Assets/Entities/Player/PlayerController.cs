@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour {
 	float xmax; 
 	float padding = 0.5f; 
 	public GameObject laser; 
+	public float health = 250f; 
 
 	// Use this for initialization
 	void Start () {
@@ -45,5 +46,18 @@ public class PlayerController : MonoBehaviour {
 
 		newPosition = Mathf.Clamp(transform.position.x, xmin, xmax); 
 		transform.position = new Vector3(newPosition, transform.position.y, 0); 
+	}
+
+	void OnTriggerEnter2D(Collider2D col){
+
+		Projectile missile = col.gameObject.GetComponent<Projectile>(); 
+
+		if(missile){
+			health -= missile.Damage; 
+			missile.Hit(); 
+			if(health <= 0){
+				Destroy(gameObject); 
+			}
+		}
 	}
 }
