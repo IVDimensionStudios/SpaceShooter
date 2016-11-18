@@ -21,16 +21,20 @@ public class EnemySpawner : MonoBehaviour {
 		xxxMax = rightBoundary.x;
 		xxxMin = leftBoundary.x;
 
-		foreach(Transform child in transform)
-		{
-			GameObject enemy = Instantiate(enemyPrefab, child.position, Quaternion.identity) as GameObject; 
-			enemy.transform.parent = child;
-		}
+		Spawn(); 
 	}
 
 	void OnDrawGizmos()
 	{
 		Gizmos.DrawWireCube(new Vector3(0,0,0), new Vector3(width, height));
+	}
+
+	void Spawn(){
+		foreach(Transform child in transform)
+		{
+			GameObject enemy = Instantiate(enemyPrefab, child.position, Quaternion.identity) as GameObject; 
+			enemy.transform.parent = child; 
+		}
 	}
 
 
@@ -53,5 +57,18 @@ public class EnemySpawner : MonoBehaviour {
 			movingRight = true; 
 		}
 
+		if(AllDead()){
+			Spawn();
+		}
+	}
+
+	bool AllDead(){
+		foreach(Transform gameObjectLeft in transform)
+		{
+			if(gameObjectLeft.childCount > 0){
+				return false; 
+			} 
+		}
+		return true; 
 	}
 }
